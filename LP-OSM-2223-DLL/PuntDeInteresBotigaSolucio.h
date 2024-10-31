@@ -1,5 +1,19 @@
 #pragma once
-class PuntDeInteresBotigaSolucio
+#include "PuntDeInteresBase.h"
+class PuntDeInteresBotigaSolucio :public PuntDeInteresBase
 {
+public:
+	PuntDeInteresBotigaSolucio() : m_shop(""), m_horari(""), m_wheelchair("no") {};
+	PuntDeInteresBotigaSolucio(const std::string shop, const std::string horari, const std::string wheelchair) :
+		m_shop(shop), m_horari(horari), m_wheelchair(wheelchair) {};
+
+	~PuntDeInteresBotigaSolucio() {};
+	std::string getName() override;
+	unsigned int getColor() override;
+
+private:
+	std::string m_shop;
+	std::string m_horari;
+	std::string m_wheelchair;
 };
 
