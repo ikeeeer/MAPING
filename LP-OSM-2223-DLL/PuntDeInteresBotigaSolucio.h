@@ -4,8 +4,8 @@ class PuntDeInteresBotigaSolucio :public PuntDeInteresBase
 {
 public:
 	PuntDeInteresBotigaSolucio() : m_shop(""), m_horari(""), m_wheelchair("no") {};
-	PuntDeInteresBotigaSolucio(const std::string shop, const std::string horari, const std::string wheelchair) :
-		m_shop(shop), m_horari(horari), m_wheelchair(wheelchair) {};
+	PuntDeInteresBotigaSolucio(Coordinate coord, std::string name,const std::string shop, const std::string horari, const std::string wheelchair) :
+		m_shop(shop), m_horari(horari), m_wheelchair(wheelchair),PuntDeInteresBase(coord,name) {};
 
 	~PuntDeInteresBotigaSolucio() {};
 	std::string getName() override;

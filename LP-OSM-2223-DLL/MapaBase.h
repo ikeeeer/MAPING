@@ -3,7 +3,7 @@
 
 #include "Common.h"
 #include "PuntDeInteresBase.h"
-#include "CamiBase.h"
+#include "CamiSolucio.h"
 
 
 class MapaBase {

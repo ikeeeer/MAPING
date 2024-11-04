@@ -6,7 +6,8 @@ class PuntDeInteresRestaurantSolucio : public PuntDeInteresBase
 public:
 	PuntDeInteresRestaurantSolucio() :m_tipos(""), m_wheelchair("no") {};
 	~PuntDeInteresRestaurantSolucio() {};
-	PuntDeInteresRestaurantSolucio(const std::string tipos, const std::string wheelchair) :m_tipos(tipos), m_wheelchair(wheelchair) {};
+	PuntDeInteresRestaurantSolucio(Coordinate coord, std::string name,const std::string tipos, const std::string wheelchair) :
+		m_tipos(tipos), m_wheelchair(wheelchair), PuntDeInteresBase(coord, name) {};
 
 
 	std::string getName() override;

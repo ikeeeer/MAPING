@@ -5,10 +5,12 @@
 #include <string>
 #include <iostream>
 #include "Common.h"
+#include <list>
 
 #include "MapaBase.h"
 #include "XML4OSMUtil.h"
-
+#include "Util.h"
+#include "MapaSolucio.h"
 
 class MapaRender {
     private:
