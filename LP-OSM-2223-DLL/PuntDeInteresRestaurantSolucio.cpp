@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "PuntDeInteresRestaurantSolucio.h"
 
-std::string PuntDeInteresRestaurantSolucio::getName()
-{
-    return m_tipos;
-}
 
 unsigned int PuntDeInteresRestaurantSolucio::getColor()
 {

@@ -8,7 +8,6 @@ public:
 		m_shop(shop), m_horari(horari), m_wheelchair(wheelchair),PuntDeInteresBase(coord,name) {};
 
 	~PuntDeInteresBotigaSolucio() {};
-	std::string getName() override;
 	unsigned int getColor() override;
 
 private:

@@ -97,7 +97,9 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 			//funció que busca si existeix el tag highway
 			if (existeixHighway(it->fills))
 			{
-				m_llistaCamins.push_back(new CamiSolucio());
+				//creamos un nuevo camino
+				m_llistaCamins.push_back(new CamiSolucio);
+				//guardamos los id de los nodos
 				for (int i = 0; i < it->fills.size(); i++)
 				{
 					if (it->fills[i].first == "nd") {
@@ -113,15 +115,15 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 						}
 					}
 				}
-				//ahora buscara los nodos que contiene las coordenadas y lo guardada dentro de camiSolucio
-				buscarCamiCoord(xmlElements,contador,posicionXmlElement);
 				//cuenta cuantas clase CamiSolucio hemos creado
 				contador++;
 
 			}
 		}
-		posicionXmlElement++;
 	}
+
+	buscarCamiCoord(xmlElements);
+
 }
 
 void MapaSolucio::getPdis(std::vector<PuntDeInteresBase*>& pdis)
@@ -136,75 +138,93 @@ void MapaSolucio::getCamins(std::vector<CamiBase*>& camins)
 	camins = m_llistaCamins;
 }
 
-// nos da el rango donde buscar 
-void MapaSolucio::buscarCamiCoord(std::vector<XmlElement>& xmlElements, int posicion,int posXMLMax)
+//busca el atributo indicado por atrBuscat y nos devuelve el valor en valor además la función devolvera un bool de si ha encontrado el valor
+bool MapaSolucio::buscarAtribut(std::vector<PAIR_ATTR_VALUE> attributes, std::string atrBuscat, std::string& valor)
 {
-	std::vector<std::string> listaIdNode = m_llistaCamins[posicion]->getVector();
-	std::vector<XmlElement>::iterator it = xmlElements.begin();
-	for (int i = 0; i < listaIdNode.size(); i++)
+
+	bool trobat = false;
+	int i = 0;
+	while (i < attributes.size() && !trobat)
 	{
-		bool trobat = false;
-
-		while (it != xmlElements.end() && !trobat)
+		if (attributes[i].first == atrBuscat)
 		{
-			if (it->id_element == "node")
-			{
-				Coordinate c;
-				c.lat = 0;
-				c.lon = 0;
+			trobat = true;
+			valor = attributes[i].second;
+		}
+		else {
+			i++;
+		}
+	}
 
-				for (int j = 0; j < it->atributs.size(); j++)
+	return trobat;
+}
+
+// nos da el rango donde buscar 
+void MapaSolucio::buscarCamiCoord(std::vector<XmlElement>& xmlElements)
+{
+	for (int i = 0; i < m_llistaCamins.size(); i++)
+	{
+		std::vector<std::string> listaIdNode = m_llistaCamins[i]->getVector();
+		for (int j = 0; j < listaIdNode.size(); j++)
+		{
+			std::vector<XmlElement>::iterator it = xmlElements.begin();
+			bool trobat = false;
+
+			while (it != xmlElements.end() && !trobat)
+			{
+				std::string valor = "";
+
+				if (it->id_element == "node" && buscarAtribut(it->atributs, "id", valor) && (listaIdNode[j] == valor))
 				{
-					if (it->atributs[j].first == "id")
+					Coordinate c;
+					c.lat = 0;
+					c.lon = 0;
+					buscarAtribut(it->atributs, "lat", valor);
+					c.lat = stod(valor);
+					buscarAtribut(it->atributs, "lon", valor);
+					c.lon = stod(valor);
+					m_llistaCamins[i]->afegirCoordinada(c);
+
+					trobat = true;	
+					
+				}
+				else {
+					it++;
+				}
+			}
+		}
+	}
+	/*
+		for (std::vector<XmlElement>::iterator it = xmlElements.begin(); it != xmlElements.end(); it++)
+		{
+
+
+					int j = 0;
+
+					while (j < listaIdNode.size() && !trobat)
 					{
-						if (listaIdNode[i] == it->atributs[j].second)
+						if (listaIdNode[j] == valor)
 						{
 							trobat = true;
 						}
-						//trobat = existeixId(listaIdNode, it->atributs[j].second);
-
+						else {
+							j++;
+						}
 					}
 
-					if (it->atributs[j].first == "lat")
+					if (trobat)
 					{
-						c.lat = stod(it->atributs[j].second);
-					}
-					if (it->atributs[j].first == "lon")
-					{
-						c.lon = stod(it->atributs[j].second);
+
 					}
 
 				}
 
-				if (trobat == true)
-				{
-					m_llistaCamins[posicion]->afegirCoordinada(c);
-				}
+
 			}
-			it++;
+
 		}
-
-	}
-	/*
-	for (int i=0; i < posXMLMax; i++)
-	{
-
-		bool trobat = false;
-		Coordinate c;
-		c.lat = 0;
-		c.lon = 0;
-		if (it->id_element == "node")
-		{
-			
-
-			if (trobat == true)
-			{
-				m_llistaCamins[posicion]->afegirCoordinada(c);
-			}
-		}
-		it++;
-	}
-	*/
+		*/
+	
 }
 
 bool MapaSolucio::existeixId(const std::vector<std::string> v, const std::string id)

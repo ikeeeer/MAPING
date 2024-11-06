@@ -10,7 +10,6 @@ public:
 		m_tipos(tipos), m_wheelchair(wheelchair), PuntDeInteresBase(coord, name) {};
 
 
-	std::string getName() override;
 	unsigned int getColor() override;
 private:
 	std::string m_tipos;

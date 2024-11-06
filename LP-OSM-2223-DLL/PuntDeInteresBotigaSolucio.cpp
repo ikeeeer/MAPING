@@ -2,11 +2,6 @@
 #include "PuntDeInteresBotigaSolucio.h"
 
 
-std::string PuntDeInteresBotigaSolucio::getName()
-{
-    return m_shop;
-}
-
 unsigned int PuntDeInteresBotigaSolucio::getColor()
 {
     
