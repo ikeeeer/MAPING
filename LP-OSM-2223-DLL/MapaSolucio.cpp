@@ -5,6 +5,7 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 {
 	int contador = 0;
 	int posicionXmlElement= 1;
+	borrarContigut();
 	//iteramos vector
 	for (std::vector<XmlElement>::iterator it = xmlElements.begin(); it!= xmlElements.end(); it++)
 	{
@@ -15,20 +16,12 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 			Coordinate a;
 			a.lat = 0;
 			a.lon = 0;
-
-			//iteramos dentro de los atributos nodes para coordenadas 
-			for (int i = 0; i < it->atributs.size(); i++)
-			{
-
-				if (it->atributs[i].first == "lat")
-				{
-					a.lat = stod(it->atributs[i].second);
-				}
-				if (it->atributs[i].first == "lon")
-				{
-					a.lon = stod(it->atributs[i].second);
-				}
-			}
+			//guardamos la coordenadas
+			std::string valor = "";
+			buscarAtribut(it->atributs, "lat", valor);
+			a.lat = stod(valor);
+			buscarAtribut(it->atributs, "lon", valor);
+			a.lon = stod(valor);
 
 			//iteramos sobre los hijos para extraer otras información
 			std::string name = "";
@@ -37,6 +30,7 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 			std::string tipus = "";
 			std::string horari = "";
 			std::string wheelchair = "";
+			std::string amenity = "";
 			for (int i = 0; i < it->fills.size(); i++)
 			{
 				
@@ -45,6 +39,11 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 				{
 					std::pair<std::string, std::string>valorTag = Util::kvDeTag(it->fills[i].second);
 					
+					if (valorTag.first == "amenity")
+					{
+						amenity = valorTag.second;
+					}
+
 					if (valorTag.first == "name")
 					{
 						name = valorTag.second;
@@ -78,17 +77,23 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 				}
 			}
 
-			if (tipus == "shop")
+			if (tipus == "shop" && name!="")
 			{
 				m_llistaDePunts.push_back(new PuntDeInteresBotigaSolucio(a, name, name2, horari, wheelchair));
 			}
-
-			if (tipus == "cuisine")
+			else if (amenity != "" && name != "")
 			{
-				m_llistaDePunts.push_back(new PuntDeInteresRestaurantSolucio(a, name, cuisine, wheelchair));
+				if (tipus == "cuisine")
+				{
+					m_llistaDePunts.push_back(new PuntDeInteresRestaurantSolucio(a, name, cuisine, wheelchair));
 
+				}
+				else {
+					m_llistaDePunts.push_back(new PuntInteresAltres(a, name, amenity));
+				}
 			}
 
+		
 		}
 
 		// comprovem que la dada sigui way
@@ -98,7 +103,7 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 			if (existeixHighway(it->fills))
 			{
 				//creamos un nuevo camino
-				m_llistaCamins.push_back(new CamiSolucio);
+				m_llistaCamins.push_back(new CamiSolucio());
 				//guardamos los id de los nodos
 				for (int i = 0; i < it->fills.size(); i++)
 				{
@@ -128,14 +133,19 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 
 void MapaSolucio::getPdis(std::vector<PuntDeInteresBase*>& pdis)
 {
-	pdis = m_llistaDePunts;
 	
-
+	for (auto& it : m_llistaDePunts)
+	{
+		pdis.push_back(it);
+	}
 }
 
 void MapaSolucio::getCamins(std::vector<CamiBase*>& camins)
 {
-	camins = m_llistaCamins;
+	for (auto& it : m_llistaCamins)
+	{
+		camins.push_back(it);
+	}
 }
 
 //busca el atributo indicado por atrBuscat y nos devuelve el valor en valor además la función devolvera un bool de si ha encontrado el valor
@@ -157,6 +167,12 @@ bool MapaSolucio::buscarAtribut(std::vector<PAIR_ATTR_VALUE> attributes, std::st
 	}
 
 	return trobat;
+}
+
+void MapaSolucio::borrarContigut()
+{
+	m_llistaCamins.clear();
+	m_llistaDePunts.clear();
 }
 
 // nos da el rango donde buscar 

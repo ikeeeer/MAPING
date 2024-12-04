@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PuntDeInteresBase.h"
 
-
 PuntDeInteresBase::PuntDeInteresBase() {
 	this->m_coord = Coordinate{ 0.0, 0.0 };
 	this->m_name = "undefinit";
@@ -21,6 +20,7 @@ std::string PuntDeInteresBase::getName() {
 }
 
 unsigned int PuntDeInteresBase::getColor() {
+	// 0xFFA500
 	return 0xFFA500;
 }
 

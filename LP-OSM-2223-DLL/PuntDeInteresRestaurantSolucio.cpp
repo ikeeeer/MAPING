@@ -4,23 +4,25 @@
 
 unsigned int PuntDeInteresRestaurantSolucio::getColor()
 {
-    
+
+    if (m_tipos == "chinese")
+    {
+        return 0xA6D9F7;
+    }
+
     if (m_wheelchair == "yes")
     {
 
         if (m_tipos == "pizza")
         {
-            return COLOR_TURQUESA;
+            return 0x03FCBA;
         }
         else {
-            return COLOR_PURPURA;
+            return 0x251351;
         }
     }
-    if (m_tipos == "chinese")
-    {
-        return COLOR_AZUL;
-    }
-        
-    return COLOR_DEFECTE;
-    
+
+
+    return 0x0000FF;
+
 }

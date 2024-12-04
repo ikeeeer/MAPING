@@ -172,6 +172,7 @@
     <ClInclude Include="PuntDeInteresBase.h" />
     <ClInclude Include="PuntDeInteresBotigaSolucio.h" />
     <ClInclude Include="PuntDeInteresRestaurantSolucio.h" />
+    <ClInclude Include="PuntInteresAltres.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="XML4OSMUtil.h" />
   </ItemGroup>
@@ -190,6 +191,7 @@
     <ClCompile Include="PuntDeInteresBase.cpp" />
     <ClCompile Include="PuntDeInteresBotigaSolucio.cpp" />
     <ClCompile Include="PuntDeInteresRestaurantSolucio.cpp" />
+    <ClCompile Include="PuntInteresAltres.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="XML4OSMUtil.cpp" />
   </ItemGroup>
